@@ -1,0 +1,47 @@
+[gd_scene load_steps=4 format=3 uid="uid://2ln6xpfo20hc"]
+
+[ext_resource type="Texture2D" uid="uid://cp4iq5fd6j8be" path="res://Projects/Graphics/Art/background.png" id="1_oxx3h"]
+[ext_resource type="PackedScene" uid="uid://77saenlcnxhu" path="res://Projects/Scenes/UI/cards/CardUI.tscn" id="2_3u66y"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bcl6j"]
+size = Vector2(256, 100)
+
+[node name="Battle" type="Node2D"]
+metadata/_edit_lock_ = true
+
+[node name="Background" type="Sprite2D" parent="."]
+modulate = Color(0.593134, 0.593134, 0.593133, 1)
+texture = ExtResource("1_oxx3h")
+centered = false
+metadata/_edit_lock_ = true
+
+[node name="CardDropArea" type="Area2D" parent="."]
+collision_layer = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CardDropArea"]
+position = Vector2(128, 50)
+shape = SubResource("RectangleShape2D_bcl6j")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -75.0
+offset_top = -30.0
+offset_right = 75.0
+grow_horizontal = 2
+grow_vertical = 0
+alignment = 1
+
+[node name="Control" parent="CanvasLayer/HBoxContainer" instance=ExtResource("2_3u66y")]
+layout_mode = 2
+
+[node name="Control2" parent="CanvasLayer/HBoxContainer" instance=ExtResource("2_3u66y")]
+layout_mode = 2
+
+[node name="Control3" parent="CanvasLayer/HBoxContainer" instance=ExtResource("2_3u66y")]
+layout_mode = 2
