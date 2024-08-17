@@ -1,11 +1,18 @@
-[gd_scene load_steps=3 format=3 uid="uid://77saenlcnxhu"]
+[gd_scene load_steps=10 format=3 uid="uid://77saenlcnxhu"]
 
 [ext_resource type="Theme" uid="uid://di2m77m3x1u5o" path="res://Projects/Resources/MainTheme.tres" id="1_ujgic"]
+[ext_resource type="Script" path="res://Projects/Scenes/UI/cards/CardUI.gd" id="2_1gg2t"]
+[ext_resource type="Script" path="res://Projects/Scenes/UI/cards/CardStateMachine.gd" id="3_hpugg"]
+[ext_resource type="Script" path="res://Projects/Scenes/UI/cards/States/CardBaseState.gd" id="4_0571t"]
+[ext_resource type="Script" path="res://Projects/Scenes/UI/cards/States/CardClickedState.gd" id="5_ledy2"]
+[ext_resource type="Script" path="res://Projects/Scenes/UI/cards/States/CardDraggingState.gd" id="6_fr0db"]
+[ext_resource type="Script" path="res://Projects/Scenes/UI/cards/States/CardAimingState.gd" id="7_um2e2"]
+[ext_resource type="Script" path="res://Projects/Scenes/UI/cards/States/CardReleasedState.gd" id="8_rf8sj"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o2i33"]
 size = Vector2(25, 30)
 
-[node name="Control" type="Control"]
+[node name="CardUI" type="Control"]
 custom_minimum_size = Vector2(25, 30)
 layout_mode = 3
 anchors_preset = 8
@@ -21,6 +28,7 @@ grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(12, 15)
 theme = ExtResource("1_ujgic")
+script = ExtResource("2_1gg2t")
 
 [node name="Color" type="ColorRect" parent="."]
 layout_mode = 1
@@ -29,6 +37,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 color = Color(0.0871507, 0.42532, 0.270294, 1)
 
 [node name="State" type="Label" parent="."]
@@ -42,7 +51,7 @@ text = "state"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="DropPointDetector" type="Area2D" parent="."]
+[node name="DropPointDetector" type="Area2D" parent="." groups=["UiLayer"]]
 collision_mask = 2
 monitorable = false
 
@@ -50,3 +59,32 @@ monitorable = false
 position = Vector2(12.5, 15)
 shape = SubResource("RectangleShape2D_o2i33")
 debug_color = Color(1.05888e-06, 0.553462, 0.646357, 0.42)
+
+[node name="CardStateMachine" type="Node" parent="." node_paths=PackedStringArray("initialState")]
+script = ExtResource("3_hpugg")
+initialState = NodePath("CardBaseState")
+
+[node name="CardBaseState" type="Node" parent="CardStateMachine"]
+script = ExtResource("4_0571t")
+
+[node name="CardClickedState" type="Node" parent="CardStateMachine"]
+script = ExtResource("5_ledy2")
+state = 1
+
+[node name="CardDraggingState" type="Node" parent="CardStateMachine"]
+script = ExtResource("6_fr0db")
+state = 2
+
+[node name="CardAimingState" type="Node" parent="CardStateMachine"]
+script = ExtResource("7_um2e2")
+state = 3
+
+[node name="CardReleasedState" type="Node" parent="CardStateMachine"]
+script = ExtResource("8_rf8sj")
+state = 4
+
+[connection signal="gui_input" from="." to="." method="OnGuiInput"]
+[connection signal="mouse_entered" from="." to="." method="OnMouseEntered"]
+[connection signal="mouse_exited" from="." to="." method="OnMouseExited"]
+[connection signal="area_entered" from="DropPointDetector" to="." method="OnAreaEnteredToDropPoint"]
+[connection signal="area_exited" from="DropPointDetector" to="." method="OnAreaExitedToDropPoint"]
